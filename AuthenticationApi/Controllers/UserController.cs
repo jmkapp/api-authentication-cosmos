@@ -35,8 +35,7 @@ namespace AuthenticationApi.Controllers
         }
 
         [HttpPost("Add")]
-        //[Authorize(Roles = "AddUser")]
-        [AllowAnonymous]
+        [Authorize(Roles = "AddUser")]
         public async Task<bool> Add(UserViewModel user)
         {
             try
