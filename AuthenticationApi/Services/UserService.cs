@@ -40,6 +40,7 @@ namespace AuthenticationApi.Services
 
             newUser.PasswordHash = new PasswordHasher<User>().HashPassword(newUser, password);
             newUser.Permissions = new List<Permission> { Permission.GetUser };
+            newUser.RefreshToken = GenerateRefreshToken();
 
             return await _userRepository.Add(newUser);
         }
@@ -108,7 +109,7 @@ namespace AuthenticationApi.Services
 
             User user = await Get(userName);
 
-            if (user == null || user.RefreshToken != refreshToken || DateTime.Now > user.RefreshTokenExpiry)
+            if (user == null || user.RefreshToken.Token != refreshToken || DateTime.Now > user.RefreshToken.Expiry)
             {
                 return result;
             }

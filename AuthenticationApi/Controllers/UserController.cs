@@ -11,12 +11,10 @@ namespace AuthenticationApi.Controllers
     [Authorize]
     public class UserController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
 
         public UserController(IConfiguration configuration, IUserService userService)
         {
-            _configuration = configuration;
             _userService = userService;
         }
 
@@ -37,7 +35,8 @@ namespace AuthenticationApi.Controllers
         }
 
         [HttpPost("Add")]
-        [Authorize(Roles = "AddUser")]
+        //[Authorize(Roles = "AddUser")]
+        [AllowAnonymous]
         public async Task<bool> Add(UserViewModel user)
         {
             try
@@ -58,7 +57,7 @@ namespace AuthenticationApi.Controllers
             {
                 return await _userService.Delete(userName);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return false;
             }

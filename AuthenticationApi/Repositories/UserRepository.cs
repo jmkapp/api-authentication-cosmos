@@ -37,9 +37,9 @@ namespace AuthenticationApi.Repositories
                     UserName = fields["UserName"].S,
                     PasswordHash = fields["Password"].S,
                     Permissions = ParsePermissions(fields["Permissions"].NS),
-                    RefreshToken = fields["RefreshToken"].M["Token"].S,
-                    RefreshTokenCreated = DateTime.Parse(fields["RefreshToken"].M["Created"].S),
-                    RefreshTokenExpiry = DateTime.Parse(fields["RefreshToken"].M["Expiry"].S)
+                    //RefreshToken = fields["RefreshToken"].M["Token"].S,
+                    //RefreshTokenCreated = DateTime.Parse(fields["RefreshToken"].M["Created"].S),
+                    //RefreshTokenExpiry = DateTime.Parse(fields["RefreshToken"].M["Expiry"].S)
                 };
             }
 
@@ -53,12 +53,12 @@ namespace AuthenticationApi.Repositories
 
         public async Task<bool> Add(User newUser)
         {
-            Dictionary<string, AttributeValue> refreshToken = new Dictionary<string, AttributeValue>()
-            {
-                { "Token", new AttributeValue { S = newUser.RefreshToken == null ? string.Empty : newUser.RefreshToken } },
-                { "Created", new AttributeValue { S = newUser.RefreshTokenCreated == null ? DateTime.MinValue.ToString(CultureInfo.CurrentCulture) : newUser.RefreshTokenCreated.ToString(CultureInfo.CurrentCulture) } },
-                { "Expiry", new AttributeValue { S = newUser.RefreshTokenExpiry == null ? DateTime.MinValue.ToString(CultureInfo.CurrentCulture) : newUser.RefreshTokenExpiry.ToString(CultureInfo.CurrentCulture) } }
-            };
+            //Dictionary<string, AttributeValue> refreshToken = new Dictionary<string, AttributeValue>()
+            //{
+            //    { "Token", new AttributeValue { S = newUser.RefreshToken == null ? string.Empty : newUser.RefreshToken } },
+            //    { "Created", new AttributeValue { S = newUser.RefreshTokenCreated == null ? DateTime.MinValue.ToString(CultureInfo.CurrentCulture) : newUser.RefreshTokenCreated.ToString(CultureInfo.CurrentCulture) } },
+            //    { "Expiry", new AttributeValue { S = newUser.RefreshTokenExpiry == null ? DateTime.MinValue.ToString(CultureInfo.CurrentCulture) : newUser.RefreshTokenExpiry.ToString(CultureInfo.CurrentCulture) } }
+            //};
 
             PutItemRequest request = new PutItemRequest
             {
@@ -68,7 +68,7 @@ namespace AuthenticationApi.Repositories
                     { "UserName", new AttributeValue { S = newUser.UserName } },
                     { "Password", new AttributeValue { S = newUser.PasswordHash } },
                     { "Permissions", new AttributeValue { NS = newUser.Permissions.Select(p => (int)p).Select(p => p.ToString()).ToList() } },
-                    { "RefreshToken", new AttributeValue { M = refreshToken } }
+                    //{ "RefreshToken", new AttributeValue { M = refreshToken } }
                 },
                 ConditionExpression = "attribute_not_exists(UserName)"
             };
