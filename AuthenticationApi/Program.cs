@@ -33,9 +33,9 @@ namespace AuthenticationApi
                     new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
             };
 
-            builder.Services.AddSingleton<IDatabaseClient, DynamoDbClient>();
+            builder.Services.AddSingleton<ICosmosDbClient, CosmosDbClient>();
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IUserRepository, CosmosDbRepository>();
             builder.Services.AddSingleton(tokenValidationParameters);
             
             builder.Services.AddAuthentication(auth =>
